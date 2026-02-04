@@ -130,6 +130,15 @@ button {
   padding: 0.6rem;
 }
 
+button:hover {
+  opacity: 0.8;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  background: gray;
+}
+
 @media(max-width:767px){
   .layout {
     grid-template-columns: 1fr;

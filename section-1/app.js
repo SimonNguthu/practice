@@ -9,6 +9,7 @@ const departmentsCount = document.getElementById("departmentsCount")
 const statusFilter = document.getElementById("statusFilter")
 const prevBtn = document.getElementById("prevBtn")
 const nextBtn = document.getElementById("nextBtn")
+const pageInfo = document.getElementById("pageInfo")
 
 let currentPage = 1
 let currentData = []
@@ -51,6 +52,15 @@ function paginate (data, page, pageSize) {
   const start = (page - 1) * pageSize
   const end = start + pageSize
   return data.slice(start, end)
+}
+
+//Updating buttonState
+function updateBtnState () {
+  const totalPages = getTotalPages()
+
+  prevBtn.disabled = currentPage === 1
+
+  nextBtn.disabled = currentPage === totalPages
 }
 
 /* ===================== 
@@ -122,6 +132,18 @@ function applyFilters () {
   render()
 }
 
+function getTotalPages() {
+  return Math.ceil(currentData.length / CONFIG.pageSize)
+}
+
+function nextPage () {
+  const totalPages = getTotalPages()
+  if(currentPage < totalPages) {
+    currentPage++
+    render()
+  }
+}
+
 function prevPage () {
   if(currentPage > 1) {
     currentPage--
@@ -129,21 +151,15 @@ function prevPage () {
   }
 }
 
-function nextPage () {
-  const totalPages = currentData.length/CONFIG.pageSize
-  if(currentPage < totalPages) {
-    currentPage++
-    render()
-  }
-}
-
 function render () {
+  pageInfo.innerHTML = `Page ${currentPage}`
   const pageData = paginate(currentData, currentPage, CONFIG.pageSize)
+  updateBtnState()
   renderTable(pageData)
   updateCards(currentData)
 }
-
 render()
+
 /* ===================== 
 Events 
 ===================== */
