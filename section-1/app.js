@@ -7,8 +7,8 @@ const activeEmployees = document.getElementById("activeEmployees")
 const averageSalaryRange = document.getElementById("averageSalaryRange")
 const departmentsCount = document.getElementById("departmentsCount")
 const statusFilter = document.getElementById("statusFilter")
-const nextBtn = document.getElementById("nextBtn")
 const prevBtn = document.getElementById("prevBtn")
+const nextBtn = document.getElementById("nextBtn")
 
 let currentPage = 1
 let currentData = []
@@ -21,7 +21,7 @@ const CONFIG = {
   statuses: ["Active", "Inactive", "On Leave"],
   departments: ["HR", "Sales"],
   startDate: new Date("2010-01-01"),
-  endDate: new Date("2025-11-30"),  
+  endDate: new Date("2025-11-30"),
   pageSize: 10
 }
 
@@ -46,7 +46,7 @@ function filterData (data, criteria) {
 // If any rule fails → discard item immediately 
 // If all rules pass → keep item }}}
 
-//Pagination function
+//Pagination funtion
 function paginate (data, page, pageSize) {
   const start = (page - 1) * pageSize
   const end = start + pageSize
@@ -61,7 +61,7 @@ function generateData (num) {
 
   for (let i = 1; i <= num; i++){
     let minSalary = randomNumber(30000, 50000)
-    let maxSlary = randomNumber(51000, 90000)
+    let maxSalary = randomNumber(51000, 90000)
 
     let employee = {
       id: i,
@@ -69,13 +69,14 @@ function generateData (num) {
       department: CONFIG.departments[randomNumber(0, CONFIG.departments.length-1)],
       status: CONFIG.statuses[randomNumber(0, CONFIG.statuses.length-1)],
       joinDate: randomDate(CONFIG.startDate, CONFIG.endDate),
-      salaryRange: `${minSalary} - ${maxSlary}`
+      salaryRange: `${minSalary} - ${maxSalary}`
     }
 
     employees.push(employee)
   }
   return employees
 }
+
 const employeeData = generateData(CONFIG.employeeNum)
 currentData = employeeData
 
@@ -121,17 +122,17 @@ function applyFilters () {
   render()
 }
 
-function nextPage () {
-  const totalPages = Math.ceil(currentData.length / CONFIG.pageSize)
-  if (currentPage < totalPages) {
-    currentPage++
+function prevPage () {
+  if(currentPage > 1) {
+    currentPage--
     render()
   }
 }
 
-function prevPage () {
-  if (currentPage > 1) {
-    currentPage--
+function nextPage () {
+  const totalPages = currentData.length/CONFIG.pageSize
+  if(currentPage < totalPages) {
+    currentPage++
     render()
   }
 }
@@ -141,11 +142,11 @@ function render () {
   renderTable(pageData)
   updateCards(currentData)
 }
-render()
 
+render()
 /* ===================== 
 Events 
 ===================== */
 statusFilter.addEventListener("change", () => applyFilters())
-nextBtn.addEventListener("click", nextPage)
 prevBtn.addEventListener("click", prevPage)
+nextBtn.addEventListener("click", nextPage)
