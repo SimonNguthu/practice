@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li>Home</li>
+        <li>Dashboard</li>
+        <li>Reports</li>
+        <li>Settings</li>
+      </ul>
+    </nav>
+  </header>
+  <div class="layout">
+     <aside>
+      <h3>Filters</h3>
+      <div class="filters">
+        <label class="filterTitle">Status</label>
+        <select id="statusFilter">
+          <option value="All">All</option>
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+          <option value="On Leave">On Leave</option>
+        </select>
+      </div>
+      <div class="filters">
+        <label class="filterTitle">Department</label>
+        <select id="departmentFilter">
+          <option value="all">All</option>
+          <option value="active">HR</option>
+          <option value="sales">Sales</option>
+        </select>
+      </div>
+      <div class="filters">
+        <label class="filterTitle">Date Range</label>
+        <input type="date"> ↓ <input type="date">
+      </div>
+    </aside>
+    <main>
+      <section id="cards">
+        <div class="card">Total Employees: <span id="totalEmployees">0</span></div>
+        <div class="card">Active Employees: <span id="activeEmployees">0</span></div>
+        <div class="card">Average Salary Range: <span id="averageSalaryRange">0</span></div>
+        <div class="card">Departments Count: <span id="departmentsCount">0</span></div>
+      </section>
+      <section id="table">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Department</th>
+              <th>Status</th>
+              <th>Join Date</th>
+              <th>Salary Range</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+
+          </tbody>
+        </table>
+      </section>
+    </main>
+   </div>
+  <footer>
+    <button id="prevBtn">prev</button>
+    <span id="pageInfo">Page x</span>
+    <button id="nextBtn">next</button>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
