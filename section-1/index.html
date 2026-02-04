@@ -22,15 +22,16 @@
       <h3>Filters</h3>
       <div class="filters">
         <label class="filterTitle">Status</label>
-        <select id="status">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
+        <select id="statusFilter">
+          <option value="All">All</option>
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+          <option value="On Leave">On Leave</option>
         </select>
       </div>
       <div class="filters">
         <label class="filterTitle">Department</label>
-        <select id="department">
+        <select id="departmentFilter">
           <option value="all">All</option>
           <option value="active">HR</option>
           <option value="sales">Sales</option>
@@ -68,9 +69,9 @@
     </main>
    </div>
   <footer>
-    <button>prev</button>
-    <span>Page x</span>
-    <button>next</button>
+    <button id="prevBtn">prev</button>
+    <span id="pageInfo">Page x</span>
+    <button id="nextBtn">next</button>
   </footer>
   <script src="app.js"></script>
 </body>
