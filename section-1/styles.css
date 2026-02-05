@@ -166,4 +166,9 @@ button:disabled {
   .card {
     font-size: smaller;
   }
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
 }

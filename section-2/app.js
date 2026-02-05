@@ -10,6 +10,7 @@ const statusFilter = document.getElementById("statusFilter")
 const prevBtn = document.getElementById("prevBtn")
 const nextBtn = document.getElementById("nextBtn")
 const pageInfo = document.getElementById("pageInfo")
+const fetchTime = document.getElementById("fetchTime")
 
 let currentPage = 1
 let currentData = []
@@ -18,12 +19,30 @@ let currentData = []
 CONFIGURATION 
 ===================== */
 const CONFIG = {
-  employeeNum: 50,
+  employees: [],
   statuses: ["Active", "Inactive", "On Leave"],
-  departments: ["HR", "Sales"],
   startDate: new Date("2010-01-01"),
   endDate: new Date("2025-11-30"),
-  pageSize: 10
+  pageSize: 5
+}
+
+/* ===================== 
+Helpers 
+===================== */
+function showLoading() {
+  tableBody.innerHTML = `
+    <tr> 
+      <td colspan="8" id="loading">Loading...</td> 
+    </tr>
+  `
+}
+
+function showError (message) {
+  tableBody.innerHTML = `
+    <tr> 
+      <td colspan="8" id="error">${message}</td> 
+    </tr>
+  `
 }
 
 /* ===================== 
@@ -66,29 +85,45 @@ function updateBtnState () {
 /* ===================== 
 Business Logic 
 ===================== */
-function generateData (num) {
-  const employees = []
 
-  for (let i = 1; i <= num; i++){
-    let minSalary = randomNumber(30000, 50000)
-    let maxSalary = randomNumber(51000, 90000)
+async function fetchUsers() {
+  const start = performance.now()
+  showLoading()
+  try{
+    const res = await fetch("https://jsonplaceholder.typicode.com/users") 
+    if(!res.ok) throw new Error("Failed to fetch")
+    const users = await res.json()
 
-    let employee = {
-      id: i,
-      name: `Employee ${i}`,
-      department: CONFIG.departments[randomNumber(0, CONFIG.departments.length-1)],
-      status: CONFIG.statuses[randomNumber(0, CONFIG.statuses.length-1)],
-      joinDate: randomDate(CONFIG.startDate, CONFIG.endDate),
-      salaryRange: `${minSalary} - ${maxSalary}`
-    }
+    CONFIG.employees = users.map(user => {
+      let minSalary = randomNumber(30000, 50000)
+      let maxSalary = randomNumber(51000, 90000)
 
-    employees.push(employee)
+      return {
+        id: user.id,
+        name: user.name,
+        contact: user.email,  
+        department: user.company.name,
+        location: user.address.city,
+        status: CONFIG.statuses[randomNumber(0, CONFIG.statuses.length-1)],
+        joinDate: randomDate(CONFIG.startDate, CONFIG.endDate),
+        salaryRange: `${minSalary} - ${maxSalary}`
+      }
+    })
+    
+    currentData = CONFIG.employees
+    render()
+
+    const end = performance.now()
+    const duration = (end - start).toFixed(2)
+    fetchTime.innerHTML = `Api fetch time was: ${duration}`
   }
-  return employees
-}
 
-const employeeData = generateData(CONFIG.employeeNum)
-currentData = employeeData
+  catch(error){
+    showError("Failed! Please check console")
+    console.error(error)
+  }
+}
+fetchUsers()
 
 /* ===================== 
 UI 
@@ -101,7 +136,9 @@ function renderTable (data) {
       <tr>
         <td>${emp.id}</td>
         <td>${emp.name}</td>
+        <td>${emp.contact}</td>
         <td>${emp.department}</td>
+        <td>${emp.location}</td>
         <td>${emp.status}</td>
         <td>${emp.joinDate}</td>
         <td>${emp.salaryRange}</td>
@@ -127,7 +164,7 @@ function applyFilters () {
   const criteria = {
     status: val => statusFilter.value === "All" || val === statusFilter.value
   }
-  currentData = filterData(employeeData, criteria)
+  currentData = filterData(CONFIG.employees, criteria)
   currentPage = 1
   render()
 }

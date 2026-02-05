@@ -118,9 +118,16 @@ th, td {
 
 footer {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 1rem;
+}
+
+#fetchTime {
+  background: #7BF570;
+  border-radius: 8px;
+  padding: 1rem;
 }
 
 button {
@@ -137,6 +144,16 @@ button:hover {
 button:disabled {
   cursor: not-allowed;
   background: gray;
+}
+
+#loading{
+  text-align: center;
+  font-style: italic;
+}
+
+#error{
+  text-align: center;
+  color:red;
 }
 
 @media(max-width:767px){
@@ -165,5 +182,10 @@ button:disabled {
   }
   .card {
     font-size: smaller;
+  }
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
   }
 }
