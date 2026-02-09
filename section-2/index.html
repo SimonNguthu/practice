@@ -21,6 +21,22 @@
      <aside>
       <h3>Filters</h3>
       <div class="filters">
+        <label class="filterTitle">Search</label>
+        <input type="text" id="searchFilter" placeholder="Name, email or department"> 
+      </div>
+      <div class="filters">
+        <label class="filterTitle">Locations</label>
+        <div id="locationFilter"></div>
+      </div>
+      <div class="filters">
+        <label class="filterTitle">Sort</label>
+        <select id="sortBy">
+          <option value="None">None</option>
+          <option value="AZ">A - Z</option>
+          <option value="ZA">Z - A</option>
+        </select>
+      </div>
+      <div class="filters">
         <label class="filterTitle">Status</label>
         <select id="statusFilter">
           <option value="All">All</option>
@@ -32,15 +48,14 @@
       <div class="filters">
         <label class="filterTitle">Department</label>
         <select id="departmentFilter">
-          <option value="all">All</option>
-          <option value="active">HR</option>
-          <option value="sales">Sales</option>
+          <option value="All">All</option>
         </select>
       </div>
       <div class="filters">
-        <label class="filterTitle">Date Range</label>
-        <input type="date"> ↓ <input type="date">
+        <label class="filterTitle">Date Range (2010-2025)</label>
+        <input type="date" id="dateFrom"> ↓ <input type="date" id="dateTo">
       </div>
+      <button id="clearFiltersBtn">Clear Filters</button>
     </aside>
     <main>
       <section id="cards">
@@ -50,7 +65,9 @@
         <div class="card">Departments Count: <span id="departmentsCount">0</span></div>
       </section>
       <section id="table">
-        <table>
+        <span id="filterResults"></span>
+        <div id="tableWrapper">
+          <table>
           <thead>
             <tr>
               <th>ID</th>
@@ -67,6 +84,7 @@
 
           </tbody>
         </table>
+        </div>
       </section>
     </main>
    </div>
