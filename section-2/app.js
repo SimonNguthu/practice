@@ -19,6 +19,7 @@ const pageInfo = document.getElementById("pageInfo")
 const fetchTime = document.getElementById("fetchTime")
 const filterResults = document.getElementById("filterResults")
 const clearFiltersBtn = document.getElementById("clearFiltersBtn")
+const chart = document.getElementById("chart")
 
 let currentPage = 1
 let currentData = []
@@ -157,8 +158,14 @@ async function fetchUsers() {
     const locationData = CONFIG.employees.map(emp => emp.location)
     locationFilter.innerHTML += locationData.map(loc => `<label><input type="checkbox" class="location-checkbox" value="${loc}">${loc}</label>`).join("")
 
+    const usersPerCity = CONFIG.employees.reduce((acc, emp) => {
+      acc[emp.location] = (acc[emp.location] || 0) + 1
+      return acc
+    }, {})
+
     currentData = CONFIG.employees
     render()
+    renderChart(usersPerCity)
 
     const end = performance.now()
     const duration = (end - start).toFixed(2)
@@ -269,6 +276,25 @@ function prevPage () {
   if(currentPage > 1) {
     currentPage--
     render()
+  }
+}
+
+function renderChart (data) {
+  chart.innerHTML = ""
+  const vals = Object.values(data)
+  const total = vals.reduce((acc, val) => acc + val, 0)
+
+  for (const city in data) {
+    const val = data[city]
+    const percentage = (val/total) * 100
+
+    chart.innerHTML += `
+    <div class="chart-row">
+    <span class="chartCity">${city}</span>
+    <div class="chartPercentage" style="width:${percentage}%"></div>
+    <span class="chartVal">${val}</span>
+    </div>
+    `
   }
 }
 
