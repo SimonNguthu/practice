@@ -6,6 +6,8 @@ function TableHeader () {
             <th>Name</th>
             <th>Email</th>
             <th>Department</th>
+            <th>Location</th>
+            <th>Status</th>
           </tr>
     </thead>
   )

@@ -8,6 +8,8 @@ function TableBody ({filteredEmployees}) {
                 <td>{emp.name}</td>
                 <td>{emp.contact}</td>
                 <td>{emp.department}</td>
+                <td>{emp.location}</td>
+                <td>{emp.status}</td>
               </tr>
             )
           })}

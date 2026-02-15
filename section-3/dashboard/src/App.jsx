@@ -4,6 +4,11 @@ import SideBar from "./components/Sidebar/SideBar"
 import DashBoard from "./components/Dashboard/DashBoard"
 import Footer from "./components/Footer"
 
+ const sortCriteria = {
+    AZ: (a, b) => a.name.localeCompare(b.name), 
+    ZA: (a, b) => b.name.localeCompare(a.name)
+  }
+
 function App () {
   const [employees, setEmployees] = useState([])
   const [loading, setLoading] = useState(false)
@@ -17,6 +22,7 @@ function App () {
     dateFrom: "",
     dateTo: ""
   })
+  const [sorting, setSorting] = useState("None")
 
   //Fetching the employees
   useEffect(() => {
@@ -47,8 +53,12 @@ function App () {
         setLoading(false)
       }
     }
+
     fetchUsers()
   }, [])
+
+  const deptData = employees.map(emp => emp.department)
+  const locations = employees.map(emp => emp.location)
 
 
   //FILTER ENGINE
@@ -60,6 +70,14 @@ function App () {
       }
       return true
     })
+  }
+
+  //SORTING ENGINE
+  function sortData (data, criteria, activeKey) {
+    const rule = criteria[activeKey] 
+
+    if(!rule) return data
+    return data.slice().sort(rule)
   }
 
   //Building filter criteria
@@ -96,16 +114,24 @@ function App () {
     }
   }
   }
-
+    
   //Updating the filters
   const updateFilters = useCallback((updates) => {
     setFilters(prev => ({ ...prev, ...updates }))
   }, [])
 
+  const updateSorting = useCallback(updates => {
+    setSorting(updates)
+  }, [])
+
   //Generating derived employees using the filters
   const filteredEmployees = useMemo (() => {
-  return filterData(employees, filterCriteria(filters))
-  }, [employees, filters])
+    const filtered = filterData(employees, filterCriteria(filters))
+    if (sorting === "None") return filtered
+
+    const sorted = sortData(filtered, sortCriteria, sorting)
+    return sorted
+  }, [employees, filters, sorting])
 
   
 
@@ -113,12 +139,19 @@ function App () {
     <div>
       <Header/>
       <div className="layout">
-        <SideBar filters = {filters} updateFilters = {updateFilters}/>
+        <SideBar 
+          filters = {filters} 
+          updateFilters = {updateFilters}
+          sorting = {sorting}
+          updateSorting = {updateSorting}
+          deptData = {deptData}
+          locations = {locations}
+        />
         <DashBoard 
           loading = {loading}
           error = {error}
           filteredEmployees = {filteredEmployees}
-          />
+        />
       </div>
       <Footer/>
     </div>
